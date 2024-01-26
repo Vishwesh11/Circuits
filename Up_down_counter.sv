@@ -28,3 +28,39 @@ module counter
   assign count_nxt = (down) ? count-1 : count+1 ;
   
 endmodule 
+
+
+
+
+// Its respective testbench module priting(Using strobe) the values dn and count to check & understand its funtionaity 
+module counttb;
+
+ logic  clk, rst, dn;
+ logic [2:0] count;
+
+counter dut ( .clk(clk), .rst(rst) , .down(dn), .count(count));
+
+initial begin 
+   rst = 1;
+   #5 rst = 0;
+   #5 rst = 1; 
+end
+
+initial begin 
+  clk = 0;
+  forever #5 clk = ~clk;
+end
+
+initial begin 
+  dn = 0;
+  #120 dn = 1 ;
+  #100 dn = 0 ;  
+end
+
+initial begin 
+  forever #10 $strobe("At time=%t values of down=%b & count=%b", $time, dn , count );  
+end
+
+initial #360 $finish;
+
+endmodule 
